@@ -59,12 +59,7 @@
 
         function updateLine() {
             const now = new Date();
-            const nowMinutes = 
-                //now.getHours() 
-                10
-                * 60 + 
-                0
-                //now.getMinutes();
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
             
             const startMinutes = startHour * 60 + startMinute;
             
