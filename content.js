@@ -12,6 +12,33 @@
         return Number(match[1]) * 60 + Number(match[2]);
     }
 
+    function getCurrentIsoWeekAndYear() {
+        const now = new Date();
+        const date = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+        const dayNum = date.getUTCDay() || 7;
+        date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+
+        return `${String(weekNo).padStart(2, "0")}${date.getUTCFullYear()}`;
+    }
+
+    function shouldHighlightCurrentDay() {
+        const currentUrl = new URL(window.location.href);
+        const path = currentUrl.pathname.toLowerCase();
+        const isSkemaPage = path.endsWith("/lectio/54/skemany.aspx");
+        if (!isSkemaPage) {
+            return false;
+        }
+
+        if (!currentUrl.search) {
+            return true;
+        }
+
+        const weekParam = currentUrl.searchParams.get("week");
+        return weekParam === getCurrentIsoWeekAndYear();
+    }
+
     function parseStartEndFromScript() {
         const scriptsText = Array.from(document.scripts)
             .map((script) => script.textContent || "")
@@ -68,6 +95,7 @@
     const startMinutes = parsedBounds.startMinutes;
     const endMinutes = parsedBounds.endMinutes;
     const totalMinutes = endMinutes - startMinutes;
+    const highlightCurrentDay = shouldHighlightCurrentDay();
 
     const tidspunkt = document.createElement("div");
     tidspunkt.id = "tidspunkt";
@@ -107,6 +135,10 @@
     }
 
     function dagenidag() {
+        if (!highlightCurrentDay) {
+            return;
+        }
+
         const todayDate = new Date();
         const dd = String(todayDate.getDate()).padStart(2, "0");
         const mm = String(todayDate.getMonth() + 1).padStart(2, "0");
@@ -128,6 +160,8 @@
     updateLine();
 
     setInterval(updateLine, 60000);
-    setInterval(dagenidag, 60000);
+    if (highlightCurrentDay) {
+        setInterval(dagenidag, 60000);
+    }
     window.addEventListener("resize", updateLine);
 })();
