@@ -1,0 +1,7 @@
+.s2module-bg {
+        background: #fff0 !important;
+        /* skema modul-rÃ¦kke  baggrundsfarve */
+        /*.surface;*/ 
+        border-top: solid 1px #e2e2e5;
+        border-bottom: solid 1px #e2e2e5;
+}

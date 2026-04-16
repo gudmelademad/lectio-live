@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Lectio Live",
+  "version": "2.7",
+  "description": "Markere hvad dag og tid det er på dit lectio skema",
+
+  "content_scripts": [
+    {
+      "matches": ["https://www.lectio.dk/lectio/*/SkemaNy.aspx*"],
+      "js": ["content.js"],
+      "css": ["TimeLineoverride.css"]
+    }
+  ],
+
+  "permissions": [],
+  "host_permissions": [
+    "https://www.lectio.dk/lectio/*/SkemaNy.aspx*"
+  ]
+}
